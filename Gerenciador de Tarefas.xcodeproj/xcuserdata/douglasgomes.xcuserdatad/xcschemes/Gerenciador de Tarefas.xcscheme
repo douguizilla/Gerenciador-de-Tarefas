@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scheme
+   version = "1.3">
+   <BuildAction>
+      <BuildActionEntries>
+         <BuildActionEntry
+            buildForRunning = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "035CFA722E84CF8E008EED93"
+               BuildableName = "Gerenciador de Tarefas"
+               BlueprintName = "Gerenciador de Tarefas"
+               ReferencedContainer = "container:Gerenciador de Tarefas.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+      </BuildActionEntries>
+   </BuildAction>
+   <LaunchAction
+      useCustomWorkingDirectory = "NO"
+      buildConfiguration = "Debug"
+      allowLocationSimulation = "YES">
+      <BuildableProductRunnable>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "035CFA722E84CF8E008EED93"
+            BuildableName = "Gerenciador de Tarefas"
+            BlueprintName = "Gerenciador de Tarefas"
+            ReferencedContainer = "container:Gerenciador de Tarefas.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
+   </LaunchAction>
+</Scheme>
