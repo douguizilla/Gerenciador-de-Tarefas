@@ -10,7 +10,10 @@ import SwiftUI
 struct Home: View {
     @State private var currentDate: Date = Date()
     @State private var weekSlider: [[Date.WeekDay]] = []
-    @State private var currentWeekIndex: Int = 0
+    @State private var currentWeekIndex: Int = 1
+    @State private var createWeek: Bool = false
+    
+    @State private var tasks: [Task] = sampleTasks.sorted(by: { $1.creationDate > $0.creationDate})
     
     @Namespace private var animation
 
@@ -18,12 +21,28 @@ struct Home: View {
         VStack(alignment: .leading, spacing: 0) {
             HeaderView()
             
+            ScrollView(.vertical){
+                VStack{
+                    TaskView()
+                }
+                .hSpacing(.center)
+                .vSpacing(.center)
+            }
         }
         .vSpacing(.top)
         .onAppear{
             if weekSlider.isEmpty {
                 let currentWeek = Date().fetchWeek()
+                
+                if let firstDate = currentWeek.first?.date {
+                    weekSlider.append(firstDate.createPreviousWeek())
+                }
+                
                 weekSlider.append(currentWeek)
+                
+                if let lastDate = currentWeek.last?.date {
+                    weekSlider.append(lastDate.createNextWeek())
+                }
             }
         }
     }
@@ -51,10 +70,12 @@ struct Home: View {
                     let week = weekSlider[index]
                     WeekView(week)
                         .tag(index)
+                        .padding(.horizontal, 15)
                 }
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             .frame(height: 90)
+            .padding(.horizontal, -15)
         }
         .hSpacing(.leading)
         .overlay(alignment: .topTrailing){
@@ -66,8 +87,13 @@ struct Home: View {
                     .clipShape(.circle)
             }
         }
-        .padding()
+        .padding(15)
         .background(.white)
+        .onChange(of: currentWeekIndex, initial: false){ oldValue, newValue in
+            if newValue == 0 || newValue == (weekSlider.count - 1) {
+                createWeek = true
+            }
+        }
     }
     
     @ViewBuilder
@@ -117,6 +143,58 @@ struct Home: View {
                     }
                 }
             }
+        }
+        .background{
+            GeometryReader{
+                let minX = $0.frame(in: .global).minX
+                
+                Color.clear
+                    .preference(key: OffsetKey.self, value: minX)
+                    .onPreferenceChange(OffsetKey.self) { value in
+                        if value.rounded() == 15 && createWeek {
+                            print("Generate Week")
+                            paginateWeek()
+                            createWeek = false
+                        }
+                    }
+            }
+        }
+    }
+    
+    @ViewBuilder
+    func TaskView() -> some View {
+        VStack(alignment: .leading, spacing: 35) {
+            ForEach($tasks){ $task in
+                TaskRowView(task: $task)
+                    .background(alignment: .leading) {
+                        if tasks.last?.id != task.id {
+                            Rectangle()
+                                .frame(width: 1)
+                                .offset(x: 8)
+                                .padding(.bottom, -35)
+                            
+                        }
+                    }
+            }
+        }
+        .padding([.vertical, .leading], 15)
+        .padding(.top, 15)
+    }
+    
+    func paginateWeek(){
+        if weekSlider.indices.contains(currentWeekIndex){
+            if let firstDate = weekSlider[currentWeekIndex].first?.date, currentWeekIndex == 0 {
+                weekSlider.insert(firstDate.createPreviousWeek(), at: 0)
+                weekSlider.removeLast()
+                currentWeekIndex = 1
+            }
+            
+            if let lastDate = weekSlider[currentWeekIndex].last?.date, currentWeekIndex == (weekSlider.count - 1) {
+                weekSlider.append(lastDate.createNextWeek())
+                weekSlider.removeFirst()
+                currentWeekIndex = weekSlider.count - 2
+            }
+            
         }
     }
 }
