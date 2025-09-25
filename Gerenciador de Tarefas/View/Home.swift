@@ -14,6 +14,7 @@ struct Home: View {
     @State private var createWeek: Bool = false
     
     @State private var tasks: [Task] = sampleTasks.sorted(by: { $1.creationDate > $0.creationDate})
+    @State private var createNewTask: Bool = false
     
     @Namespace private var animation
 
@@ -30,6 +31,26 @@ struct Home: View {
             }
         }
         .vSpacing(.top)
+        .overlay(alignment: .bottomTrailing){
+            Button(action: { createNewTask = true }) {
+                Image(systemName: "plus")
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.white)
+                    .frame(width: 55, height: 55)
+                    .background(
+                        .blue.shadow(
+                            .drop(
+                                color: .black.opacity(0.25),
+                                radius: 5,
+                                x: 10,
+                                y: 10
+                            )
+                        ),
+                        in: .circle
+                    )
+            }
+            .padding(15)
+        }
         .onAppear{
             if weekSlider.isEmpty {
                 let currentWeek = Date().fetchWeek()
@@ -44,6 +65,13 @@ struct Home: View {
                     weekSlider.append(lastDate.createNextWeek())
                 }
             }
+        }
+        .sheet(isPresented: $createNewTask) {
+            NewTaskView()
+                .presentationDetents([.height(300)])
+                .interactiveDismissDisabled()
+                .presentationCornerRadius(30)
+                .presentationBackground(.white)
         }
     }
     
