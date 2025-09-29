@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TaskRowView: View {
-    @Binding var task: Task
+    @Bindable var task: Task
     var body: some View {
         HStack(alignment: .top, spacing: 15){
             Circle()
@@ -40,7 +40,7 @@ struct TaskRowView: View {
             .padding(15)
             .hSpacing(.leading)
             .background(
-                task.tint.opacity(0.3),
+                task.tintColor.opacity(0.3),
                 in: .rect(
                     topLeadingRadius: 15,
                     bottomLeadingRadius: 15
