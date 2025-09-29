@@ -10,24 +10,39 @@ import SwiftData
 
 @Model
 class Task: Identifiable {
-    var id: UUID = UUID()
+    var id: UUID
     var title: String
-    var creationDate: Date = Date()
-    var isCompleted: Bool = false
-    var tint: Color
+    var creationDate: Date
+    var isCompleted: Bool
+    var tint: String
     
     init(
         id: UUID = .init(),
         title: String,
         creationDate: Date = .init(),
         isCompleted: Bool = false,
-        tint: Color
+        tint: String
     ) {
         self.id = id
         self.title = title
         self.creationDate = creationDate
         self.isCompleted = isCompleted
         self.tint = tint
+    }
+    
+    var tintColor: Color {
+        switch tint {
+        case "red":
+            return .red
+        case "yellow":
+            return .yellow
+        case "green":
+            return .green
+        case "blue":
+            return .blue
+        default:
+            return .purple
+        }
     }
 }
 
