@@ -6,24 +6,30 @@
 //
 
 import SwiftUI
+import SwiftData
 
-struct Task: Identifiable {
+@Model
+class Task: Identifiable {
     var id: UUID = UUID()
     var title: String
     var creationDate: Date = Date()
     var isCompleted: Bool = false
     var tint: Color
+    
+    init(
+        id: UUID = .init(),
+        title: String,
+        creationDate: Date = .init(),
+        isCompleted: Bool = false,
+        tint: Color
+    ) {
+        self.id = id
+        self.title = title
+        self.creationDate = creationDate
+        self.isCompleted = isCompleted
+        self.tint = tint
+    }
 }
-
-var sampleTasks: [Task] = [
-    .init(title: "Estudar SwiftUI", creationDate: .updateHour(-5), isCompleted: true, tint: .blue),
-    .init(title: "Fazer exercícios de matemática", creationDate: .updateHour(-3), isCompleted: false, tint: .red),
-    .init(title: "Comprar leite", creationDate: .updateHour(-4), isCompleted: false, tint: .yellow),
-    .init(title: "Ver filme", creationDate: .updateHour(0), isCompleted: true, tint: .green),
-    .init(title: "Passear com o cão", creationDate: .updateHour(2), isCompleted: false, tint: .purple),
-    .init(title: "Estudar inglês", creationDate: .updateHour(1), isCompleted: true, tint: .orange),
-    .init(title: "Fazer compras", creationDate: .updateHour(3), isCompleted: false, tint: .pink),
-]
 
 extension Date {
     static func updateHour(_ value: Int) -> Date {
