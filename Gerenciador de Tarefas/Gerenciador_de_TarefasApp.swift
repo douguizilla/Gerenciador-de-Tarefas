@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct Gerenciador_de_TarefasApp: App {
@@ -13,5 +14,6 @@ struct Gerenciador_de_TarefasApp: App {
         WindowGroup {
             ContentView()
         }
+        .modelContainer(for: Task.self)
     }
 }
