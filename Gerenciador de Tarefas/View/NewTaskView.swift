@@ -6,9 +6,12 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct NewTaskView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var context
+    
     @State private var taskTitle: String = ""
     @State private var taskDate: Date = .init()
     @State private var taskColor: Color = .red
@@ -75,7 +78,18 @@ struct NewTaskView: View {
             Spacer(minLength: 0)
             
             Button{
-                
+                let task = Task(
+                    title: taskTitle,
+                    creationDate: taskDate,
+                    tint: getStringColor(color: taskColor)
+                )
+                do{
+                    context.insert(task)
+                    try context.save()
+                    dismiss()
+                }catch{
+                    print(error.localizedDescription)
+                }
             }label: {
                 Text("Create Task")
                     .font(.title3)
@@ -90,6 +104,17 @@ struct NewTaskView: View {
             .opacity(taskTitle == "" ? 0.5 : 1)
         }
         .padding(15)
+    }
+    
+    private func getStringColor(color: Color) -> String {
+        switch color {
+        case .red: return "red"
+        case .yellow: return "yellow"
+        case .green: return "green"
+        case .blue: return "blue"
+        case .purple: return "purple"
+        default: return "black"
+        }
     }
 }
 
